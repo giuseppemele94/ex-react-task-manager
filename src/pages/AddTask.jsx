@@ -1,4 +1,5 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useContext } from "react";
+import { GlobalContext } from "../contexts/GlobalContext";
 
 
 function AddTask() {
@@ -11,6 +12,9 @@ function AddTask() {
 
     // stato con select non controllata
     const statusRef = useRef();
+
+     // recupero la funzione addTask dal context
+    const { addTask } = useContext(GlobalContext);
 
     const symbols = `!@#$%^&*()-_=+[]{}|;:'\\",.<>?/\\\`~`;
 
@@ -36,7 +40,7 @@ function AddTask() {
     }, [title]);
 
     // funzione submit del form che stampa per il momento i dati in console
-    const submit = (e) => {
+    const submit = async (e) => {
         e.preventDefault();
 
         const trimmedTitle = title.trim();
@@ -45,11 +49,24 @@ function AddTask() {
         if (!trimmedTitle || titleError) return;
 
         // stampo i dati in console
-        console.log({
+        const newTask = {
             title: trimmedTitle,
             description: descriptionRef.current.value,
             status: statusRef.current.value,
-        });
+        };
+
+        try {
+            await addTask(newTask);
+            alert("Task creata con successo");
+
+            //reset del form
+            setTitle("");
+            descriptionRef.current.value = "";
+            statusRef.current.value = "To do";
+
+        } catch(error) {
+            alert(error.message);
+        }
     };
 
     return (

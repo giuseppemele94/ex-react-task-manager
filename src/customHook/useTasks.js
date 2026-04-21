@@ -19,7 +19,21 @@ function useTasks() {
     },[]); 
 
     /**Definire le funzioni addTask, removeTask, updateTask all'interno di useTasks(), lasciandole vuote per ora. */
-    const addTask = () => {};
+    const addTask = async newTask => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/tasks`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"},
+      body: JSON.stringify(newTask)
+    });
+
+    const {success,message,task} = await response.json();
+    if(!success) throw new Error(message); 
+
+    setTasks(prev => [...prev,task]); 
+
+}
+
 
     const removeTask = () => {};
 
