@@ -5,7 +5,7 @@ export default function NavBar() {
        
         <nav>
             <NavLink to="">Lista dei Task </NavLink>
-             <NavLink to="/AddTask">Aggiungi Task </NavLink>
+             <NavLink to="/addTask">Aggiungi Task </NavLink>
         </nav>
     )
 }
