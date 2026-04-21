@@ -1,29 +1,19 @@
-import { createContext,useState,useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
+import useTasks from "../customHook/useTasks";
 
-export const GlobalContext = createContext(); 
 
-function GlobalProvider ({children}) {
+export const GlobalContext = createContext();
 
-    //variabili di stato che vogliamo condividere
-    const [tasks,setTasks] = useState([]); 
 
-    //effettuo la chiamata all'endpoint e salvo i dati nello stato 
-    useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/tasks`)
-    .then((res) => res.json())
-    .then((data) => {
-        console.log("Task ricevuti:", data);
-        setTasks(data);
-    })
-    .catch((error) => {
-        console.error("Errore nel recupero dei task",error); 
-    })
-    },[])
 
-    return(
-    <GlobalContext.Provider value={{tasks, setTasks}}>
-        {children}
-    </GlobalContext.Provider>)
+function GlobalProvider({ children }) {
+
+    const { tasks, addTask, removeTask, updateTask } = useTasks();
+
+    return (
+        <GlobalContext.Provider value={{ tasks, addTask, removeTask,updateTask }}>
+            {children}
+        </GlobalContext.Provider>)
 }
 
 export default GlobalProvider
