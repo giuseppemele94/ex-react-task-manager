@@ -14,6 +14,10 @@ function TaskDetail() {
 
   const { title, description, status, createdAt } = task;
 
+  const handleDelete = () => {
+    console.log("Elimino task con id:", task.id); 
+  }
+
   return (
     <div className="task-detail-page">
       <div className="task-detail-card">
@@ -22,7 +26,7 @@ function TaskDetail() {
         <p><strong>Stato:</strong> {status}</p>
         <p><strong>Data di creazione:</strong> {new Date(createdAt).toLocaleDateString()}</p>
 
-        <button onClick={() => console.log("Elimino task")}>
+        <button onClick={handleDelete}>
           Elimina Task
         </button>
       </div>
