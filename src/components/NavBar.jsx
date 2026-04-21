@@ -1,11 +1,26 @@
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+
 
 export default function NavBar() {
-    return (
-       
-        <nav>
-            <NavLink to="">Lista dei Task </NavLink>
-             <NavLink to="/addTask">Aggiungi Task </NavLink>
-        </nav>
-    )
+  return (
+    <nav className="navbar">
+      <NavLink
+        to="/"
+        className={({ isActive }) =>
+          isActive ? "nav-link active-link" : "nav-link"
+        }
+      >
+        Lista dei Task
+      </NavLink>
+
+      <NavLink
+        to="/addTask"
+        className={({ isActive }) =>
+          isActive ? "nav-link active-link" : "nav-link"
+        }
+      >
+        Aggiungi Task
+      </NavLink>
+    </nav>
+  );
 }
