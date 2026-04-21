@@ -3,7 +3,7 @@ import TaskList from "./pages/TaskList";
 import AddTask from "./pages/AddTask";
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import GlobalProvider from "./contexts/GlobalContext";
-
+import TaskDetail from "./pages/TaskDetail"
 function App() {
 
   return (
@@ -14,6 +14,7 @@ function App() {
         <Route element={<DefaultLayout />}>
           <Route path="/" element={<TaskList />} />
           <Route path="/addTask" element={<AddTask />} />
+          <Route path="/task/:id" element={<TaskDetail />} />
         </Route>
       </Routes>
     </BrowserRouter>
