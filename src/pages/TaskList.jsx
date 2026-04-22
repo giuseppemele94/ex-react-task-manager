@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react";
+import { useContext, useMemo , useCallback} from "react";
 import { GlobalContext } from "../contexts/GlobalContext";
 import TaskRow from "../components/TaskRow";
 import { useState } from "react";
@@ -12,6 +12,10 @@ function TaskList() {
   //stato che rappresenta la direzione per l'ordinamento(1 crescente, -1 descrescente)
   const [sortOrder,setSortOrder] = useState(1); 
 
+  //stato per la ricerca
+  const [searchQuery, setSearchQuery] = useState(""); 
+
+
   //funzione che gestisce il cliclk sulle intestazioni 
   const handleSort = (column) => {
     if(sortBy === column) {
@@ -22,9 +26,36 @@ function TaskList() {
     }
   }
 
-  //array ordinato calcolato con useMemo 
-  const sortedTaks = useMemo(() => {
-    const sortedArray = [...tasks];
+
+    // funzione debounce generica
+  const debounce = (callback, delay) => {
+    let timer;
+
+    return (value) => {
+      clearTimeout(timer);
+
+      timer = setTimeout(() => {
+        callback(value);
+      }, delay);
+    };
+  };
+
+    // funzione debounced memorizzata con useCallback
+  const debouncedSearch = useCallback(
+    debounce((value) => {
+      setSearchQuery(value);
+    }, 500),
+    []
+  );
+
+  //array filtrato e ordinato calcolato con useMemo 
+  const FilteredAndSortedTaks = useMemo(() => {
+
+    //nell'array filtrato mi vado a prendere i titoli da task che includono la stringa presente nella searchQuery
+    const filteredTasks = tasks.filter((task) => 
+    task.title.toLowerCase().includes(searchQuery.toLowerCase()))
+
+    const sortedArray = [...filteredTasks];
 
     sortedArray.sort((a,b) => {
       //ordinamento per title 
@@ -54,11 +85,18 @@ function TaskList() {
     });
 
     return sortedArray;
-  } , [tasks,sortBy,sortOrder])
+  } , [tasks,sortBy,sortOrder,searchQuery])
 
   return (
     <div className="task-list-page">
       <h1 className="task-list-title">Lista dei task</h1>
+
+      {/**Input per la ricerca */}
+      <input
+      type ="text"
+      placeholder="Cerca una task.."
+      onChange={(e) => debouncedSearch(e.target.value)}
+      />
 
       {tasks.length === 0 ? (
         <p className="empty-message">Nessun task presente</p>
@@ -74,7 +112,7 @@ function TaskList() {
             </thead>
 
             <tbody>
-              {sortedTaks.map((task) => (
+              {FilteredAndSortedTaks.map((task) => (
                 <TaskRow key={task.id} task={task} />
               ))}
             </tbody>
