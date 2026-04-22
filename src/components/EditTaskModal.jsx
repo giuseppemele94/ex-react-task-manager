@@ -1,17 +1,14 @@
-import { useState,useRef , useEffect } from "react";
-import Modal from './Modal'; 
+import { useState, useEffect, useRef } from "react";
+import Modal from "./Modal";
 
-function EditTaskModal({show,onClose,task,onSave}) {
 
-     // ref al form per poter usare requestSubmit()
+function EditTaskModal({ show, onClose, task, onSave }) {
   const editFormRef = useRef();
 
-  // stati controllati del form
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("To do");
 
-   // quando cambia task, inizializzo i campi del form
   useEffect(() => {
     if (task) {
       setTitle(task.title || "");
@@ -20,7 +17,6 @@ function EditTaskModal({show,onClose,task,onSave}) {
     }
   }, [task]);
 
-  // submit del form
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -34,46 +30,48 @@ function EditTaskModal({show,onClose,task,onSave}) {
 
   return (
     <Modal
-    show={show}
-    onClose={onClose}
-    title="Modifica task"
-    confirmText ="Salva"
-    onConfirm={() => editFormRef.current.requestSubmit()}
-    content ={
-        <form ref={editFormRef} onSubmit={handleSubmit}>
+      show={show}
+      onClose={onClose}
+      title="Modifica Task"
+      confirmText="Salva"
+      onConfirm={() => editFormRef.current.requestSubmit()}
+      content={
+        <form ref={editFormRef} onSubmit={handleSubmit} className="edit-task-form">
+          <section className="edit-form-group">
+            <label className="edit-form-label">Nome</label>
+            <input
+              className="edit-form-input"
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </section>
 
-            <section>
-                <label>Nome</label>
-                <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder=""/>
-            </section>
+          <section className="edit-form-group">
+            <label className="edit-form-label">Descrizione</label>
+            <textarea
+              className="edit-form-textarea"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </section>
 
-            <section>
-                <label>Descrizione</label>
-                <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                />
-            </section>
-
-            <section>
-                <label>Stato</label>
-                <select 
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}>
-                <option value="To do">To do</option>
-                <option value="Doing">Doing</option>
-                <option value="Done">Done</option>
-
-                </select>
-            </section>
-
+          <section className="edit-form-group">
+            <label className="edit-form-label">Stato</label>
+            <select
+              className="edit-form-select"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <option value="To do">To do</option>
+              <option value="Doing">Doing</option>
+              <option value="Done">Done</option>
+            </select>
+          </section>
         </form>
-    }/>
-  )
+      }
+    />
+  );
 }
 
-export default EditTaskModal; 
+export default EditTaskModal;
